@@ -8,14 +8,15 @@ public class Book {
     private String author;
     private String publishDate;
     private PrintStream printStream;
-    private Boolean bookAvailability = true;
+    private Boolean bookAvailability;
 
-    public Book(String title, String author, String publishDate, PrintStream printStream) {
+    public Book(String title, String author, String publishDate, PrintStream printStream, Boolean bookAvailability) {
 
         this.title = title;
         this.author = author;
         this.publishDate = publishDate;
         this.printStream = printStream;
+        this.bookAvailability = bookAvailability;
     }
 
     public String details() {
@@ -31,10 +32,16 @@ public class Book {
         if(bookAvailability == true) {
             bookAvailability = false;
             printCheckoutMessage();
+        } else {
+           printUnsuccessfulyCheckoutMessage();
         }
     }
 
     private void printCheckoutMessage() {
         printStream.println("Thank you! Enjoy the book");
+    }
+
+    private void printUnsuccessfulyCheckoutMessage() {
+        printStream.println("That book is not available.");
     }
 }

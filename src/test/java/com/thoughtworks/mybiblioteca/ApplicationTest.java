@@ -1,15 +1,15 @@
 package com.thoughtworks.mybiblioteca;
 
-import com.thoughtworks.mybiblioteca.Application;
-import com.thoughtworks.mybiblioteca.ListBookCommand;
-import com.thoughtworks.mybiblioteca.Menu;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,17 +20,24 @@ public class ApplicationTest {
     private Application application;
     private PrintStream printStream;
     private Menu menu;
+    private Map<String, Command> libraryCommands;
+    private BufferedReader bufferedReader;
 
     @Before
     public void setUp() {
         printStream = mock(PrintStream.class);
         menu = mock(Menu.class);
-        application = new Application(printStream, menu);
+        bufferedReader = mock(BufferedReader.class);
+        libraryCommands = mock(HashMap.class);
+        application = new Application(printStream, menu, libraryCommands, bufferedReader);
 
     }
 
     @Test
-    public void shouldWelcomeUserWhenApplicationStarts() {
+    public void shouldWelcomeUserWhenApplicationStarts() throws IOException {
+        when(bufferedReader.readLine()).thenReturn("1").thenReturn("0");
+        when(libraryCommands.containsKey(anyString())).thenReturn(true);
+        when(libraryCommands.containsKey(anyString())).thenReturn(false);
 
         application.start();
 

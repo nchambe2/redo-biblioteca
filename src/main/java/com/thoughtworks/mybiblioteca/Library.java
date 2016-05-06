@@ -31,13 +31,9 @@ public class Library {
 
     public void checkoutBook() {
         String bookToCheckout = getUserInput();
-        String bookTitle;
 
         for(Book book : bookList) {
-
-            bookTitle = book.getTitle();
-
-            if (bookToCheckout.equals(bookTitle)) {
+            if (bookToCheckout.equals(book.getTitle())) {
                 book.checkout();
             }
         }

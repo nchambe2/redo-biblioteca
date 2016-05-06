@@ -10,6 +10,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class BookTest {
 
@@ -17,7 +18,7 @@ public class BookTest {
     private String author;
     private String publishDate;
     private Book book;
-    private Boolean bookAvailability = true;
+    private Boolean bookAvailability;
     private PrintStream printStream;
 
     @Before
@@ -26,26 +27,34 @@ public class BookTest {
         author = "author";
         publishDate = "publishDate";
         printStream = mock(PrintStream.class);
-        book = new Book(title, author, publishDate, printStream);
     }
 
     @Test
     public void shouldReturnBookDetails() {
+        bookAvailability = true;
+        book = new Book(title, author, publishDate, printStream, bookAvailability);
 
         assertThat(book.details(), is("title, author, publishDate"));
     }
 
-    @Test
-    public void shouldSuccessfullyCheckoutBookWhenBookIsAvailable() {
-
-        book.checkout();
-        assertThat(bookAvailability, is(false));
-    }
 
     @Test
     public void shouldDisplaySuccessfulCheckoutMessageWhenBookIsAvailable() {
+        bookAvailability = true;
+        book = new Book(title, author, publishDate, printStream, bookAvailability);
 
         book.checkout();
+
         verify(printStream).println("Thank you! Enjoy the book");
+    }
+
+    @Test
+    public void shouldDisplyUnsuccessfulCheckoutMessageWhenBookIsNotAvailable() {
+        bookAvailability = false;
+        book = new Book(title, author, publishDate, printStream, bookAvailability);
+
+        book.checkout();
+
+        verify(printStream).println("That book is not available.");
     }
 }

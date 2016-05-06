@@ -14,8 +14,8 @@ public class Main {
         PrintStream printStream = System.out;
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         List<Book> bookList = new ArrayList<>();
-        Book book1 = new Book("Ender's Game", "Orson Scott Card", "15 January 1985", printStream);
-        Book book2 = new Book("The Jungle Book ", "Rudyard Kipling", "1894", printStream);
+        Book book1 = new Book("Ender's Game", "Orson Scott Card", "15 January 1985", printStream, true);
+        Book book2 = new Book("The Jungle Book", "Rudyard Kipling", "1894", printStream, true);
         bookList.add(book1);
         bookList.add(book2);
         Library library = new Library(bookList, printStream, bufferedReader);
@@ -25,7 +25,7 @@ public class Main {
         libraryCommands.put("2", new CheckoutBookCommand(library));
         Menu menu = new Menu(bufferedReader, printStream, libraryCommands);
 
-        Application application =  new Application(printStream, menu);
+        Application application =  new Application(printStream, menu, libraryCommands, bufferedReader);
         application.start();
     }
 }
