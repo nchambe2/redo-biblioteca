@@ -1,7 +1,5 @@
 package com.thoughtworks.mybiblioteca;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
@@ -9,13 +7,13 @@ public class Library {
 
     private List<Book> bookList;
     private PrintStream printStream;
-    private BufferedReader bufferedReader;
+    private MenuPrompter menuPrompter;
 
-    public Library(List<Book> bookList, PrintStream printStream, BufferedReader bufferedReader) {
+    public Library(List<Book> bookList, PrintStream printStream, MenuPrompter menuPrompter) {
 
         this.bookList = bookList;
         this.printStream = printStream;
-        this.bufferedReader = bufferedReader;
+        this.menuPrompter = menuPrompter;
     }
 
     public void listBooks() {
@@ -30,23 +28,40 @@ public class Library {
 
 
     public void checkoutBook() {
-        String bookToCheckout = getUserInput();
+        String userBookTitle = menuPrompter.getUserInput();
 
-        for(Book book : bookList) {
-            if (bookToCheckout.equals(book.getTitle())) {
-                book.checkout();
-            }
+        try {
+            Book book = bookFromTitle(userBookTitle);
+            book.checkout();
+        } catch (BookNotAvailableException e) {
+            printStream.println(e.message);
+        }
+    }
+
+    public void returnBook() {
+        String userBookToReturn = menuPrompter.getUserInput();
+
+        try {
+            Book book = bookFromTitle(userBookToReturn);
+            bookAvailability(book);
+            book.returnIt();
+        } catch (BookNotAvailableException e) {
+            printStream.println(e.message);
         }
 
     }
 
-
-    private String getUserInput() {
-        try {
-            return bufferedReader.readLine();
-        } catch(IOException e) {
-            e.printStackTrace();
+    private Book bookFromTitle(String bookTitle) throws BookNotAvailableException {
+        for(Book book : bookList) {
+            if(book.getTitle().equals(bookTitle)) {
+                return book;
+            }
         }
-        return null;
+
+        throw new BookNotAvailableException();
+    }
+
+    private Boolean bookAvailability(Book book) {
+        return book.getBookAvailability();
     }
 }

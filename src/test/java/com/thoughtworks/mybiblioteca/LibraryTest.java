@@ -3,13 +3,10 @@ package com.thoughtworks.mybiblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,7 +17,7 @@ public class LibraryTest {
     private PrintStream printStream;
     private Library library;
     private Book book1;
-    private BufferedReader bufferedReader;
+    private MenuPrompter menuPrompter;
 
     @Before
     public void setUp() {
@@ -28,8 +25,8 @@ public class LibraryTest {
         book1 = mock(Book.class);
         booksList.add(book1);
         printStream = mock(PrintStream.class);
-        bufferedReader = mock(BufferedReader.class);
-        library = new Library(booksList, printStream, bufferedReader);
+        menuPrompter = mock(MenuPrompter.class);
+        library = new Library(booksList, printStream, menuPrompter);
     }
 
     @Test
@@ -39,8 +36,8 @@ public class LibraryTest {
     }
 
     @Test
-    public void shouldCheckoutBookWhenBookIsCheckedIn() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("Book 1");
+    public void shouldCheckoutBookWhenBookIsCheckedIn() {
+        when(menuPrompter.getUserInput()).thenReturn("Book 1");
 
         library.checkoutBook();
 

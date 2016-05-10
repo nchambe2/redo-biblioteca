@@ -27,21 +27,31 @@ public class Book {
         return title;
     }
 
+    public Boolean getBookAvailability() {
+        return bookAvailability;
+    }
+
     public void checkout() {
 
-        if(bookAvailability == true) {
+        if(bookAvailability) {
             bookAvailability = false;
             printCheckoutMessage();
         } else {
-           printUnsuccessfulyCheckoutMessage();
+           printUnsuccessfulCheckoutMessage();
         }
     }
+
 
     private void printCheckoutMessage() {
         printStream.println("Thank you! Enjoy the book");
     }
 
-    private void printUnsuccessfulyCheckoutMessage() {
+    private void printUnsuccessfulCheckoutMessage() {
         printStream.println("That book is not available.");
+    }
+
+    public void returnIt() {
+        bookAvailability = true;
+        printStream.println("Book has successfully been returned");
     }
 }

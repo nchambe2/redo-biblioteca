@@ -1,20 +1,21 @@
 package com.thoughtworks.mybiblioteca;
 
-public class ListBookCommand implements Command{
+public class ReturnBookCommand implements Command {
 
     private Library library;
 
-    public ListBookCommand(Library library) {
+    public ReturnBookCommand(Library library) {
+
         this.library = library;
     }
 
     @Override
     public void run() {
-        library.listBooks();
+        library.returnBook();
     }
 
     @Override
     public String name() {
-        return "List Books";
+        return "Return Book";
     }
 }

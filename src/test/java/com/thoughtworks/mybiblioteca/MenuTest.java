@@ -3,90 +3,70 @@ package com.thoughtworks.mybiblioteca;
         import org.junit.Before;
         import org.junit.Test;
 
-        import java.io.BufferedReader;
-        import java.io.IOException;
         import java.io.PrintStream;
         import java.util.HashMap;
         import java.util.Map;
 
-        import static org.mockito.Matchers.contains;
         import static org.mockito.Mockito.*;
 
 public class MenuTest {
 
-    private BufferedReader bufferedReader;
     private Menu menu;
     private PrintStream printStream;
     private  Map<String, Command>  libraryCommands;
-    private ListBookCommand listBookCommand;
-    private QuitCommand quitCommand;
-    private CheckoutBookCommand checkoutBookCommand;
+    private Command listBookCommand;
+    private Command quitCommand;
+    private Command checkoutBookCommand;
+    private Command returnBookCommand;
+
+    public MenuTest() {
+    }
 
     @Before
-    public void setUP() {
-        bufferedReader = mock(BufferedReader.class);
+    public void setUp() {
         printStream = mock(PrintStream.class);
-        libraryCommands = mock(HashMap.class);
-        listBookCommand = mock(ListBookCommand.class);
-        quitCommand = mock(QuitCommand.class);
-        checkoutBookCommand = mock(CheckoutBookCommand.class);
-        menu = new Menu(bufferedReader, printStream, libraryCommands);
+        libraryCommands = new HashMap<>();
+        listBookCommand = mock(Command.class);
+        checkoutBookCommand = mock(Command.class);
+        quitCommand = mock(Command.class);
+        returnBookCommand = mock(Command.class);
+        libraryCommands.put("0", quitCommand);
+        libraryCommands.put("1", listBookCommand);
+        libraryCommands.put("2", checkoutBookCommand);
+        libraryCommands.put("3", returnBookCommand);
+        menu = new Menu(printStream, libraryCommands);
 
     }
 
     @Test
-    public void shouldPrintMenuOptionsWhenApplicationStarts() throws IOException {
-
+    public void shouldPrintQuitOptionWhenApplicationStarts(){
         menu.print();
 
-        verify(printStream).println(contains("1. List Books"));
-    }
-
-    @Test
-    public void shouldListBooksWhenUserSelectsListBookOption() throws IOException {
-
-        when(bufferedReader.readLine()).thenReturn("1");
-        when(libraryCommands.containsKey(anyString())).thenReturn(true);
-        when(libraryCommands.get(anyString())).thenReturn(listBookCommand);
-
-        menu.executeUserCommand();
-
-        verify(listBookCommand).run();
-    }
-
-    @Test
-    public void shouldQuitWhenUserSelectsQuitOption() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("0");
-        when(libraryCommands.containsKey(anyString())).thenReturn(true);
-        when(libraryCommands.get(anyString())).thenReturn(quitCommand);
-
-        menu.executeUserCommand();
-
-        verify(quitCommand).run();
+        verify(quitCommand).name();
 
     }
 
     @Test
-    public void shouldCheckoutBookWhenUserSelectsCheckoutBookOption() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("2");
-        when(libraryCommands.containsKey(anyString())).thenReturn(true);
-        when(libraryCommands.get(anyString())).thenReturn(checkoutBookCommand);
+    public void shouldPrintListBookOptionWhenApplicationStarts() {
+        menu.print();
 
-        menu.executeUserCommand();
-
-        verify(checkoutBookCommand).run();
+        verify(listBookCommand).name();
 
     }
 
     @Test
-    public void shouldShowMessageWhenInvalidUserInput() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("fjdklsjfalk").thenReturn("1");
-        when(libraryCommands.containsKey(anyString())).thenReturn(false).thenReturn(true);
-        when(libraryCommands.get(anyString())).thenReturn(quitCommand);
+    public void shouldPrintCheckoutBookOptionWhenApplicationStarts() {
+        menu.print();
 
-        menu.executeUserCommand();
+        verify(checkoutBookCommand).name();
 
-        verify(printStream).println("Select a valid option!");
+    }
+    
+    @Test
+    public void shouldPrintReturnBookOptionWhenApplication() {
+        menu.print();
+
+        verify(returnBookCommand).name();
     }
 
 }
